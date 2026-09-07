@@ -1,0 +1,39 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenQFR API",
+    "version": "0.1.0",
+    "description": "Read-only discovery of machine-readable quantitative failure evidence. Signed submissions are quarantined."
+  },
+  "servers": [{"url": "https://openqfr.dev"}],
+  "paths": {
+    "/health": {"get": {"summary": "Health and record counts", "responses": {"200": {"description": "Healthy"}}}},
+    "/api/v1/stats": {"get": {"summary": "Public record statistics", "responses": {"200": {"description": "Statistics"}}}},
+    "/api/v1/failures": {
+      "get": {
+        "summary": "Search public QFR records",
+        "parameters": [
+          {"name":"symbol","in":"query","schema":{"type":"string"}},
+          {"name":"generation","in":"query","schema":{"type":"string"}},
+          {"name":"failure_code","in":"query","schema":{"type":"string"}},
+          {"name":"limit","in":"query","schema":{"type":"integer","minimum":1,"maximum":100}},
+          {"name":"offset","in":"query","schema":{"type":"integer","minimum":0}}
+        ],
+        "responses": {"200": {"description": "Matching records"}}
+      }
+    },
+    "/api/v1/failures/{record_id}": {
+      "get": {
+        "summary": "Get one public QFR record",
+        "parameters": [{"name":"record_id","in":"path","required":true,"schema":{"type":"string"}}],
+        "responses": {"200":{"description":"QFR record"},"404":{"description":"Not found"}}
+      }
+    },
+    "/api/v1/failures/submit": {
+      "post": {
+        "summary": "Submit a signed QFR record to quarantine",
+        "responses": {"202":{"description":"Pending review"},"401":{"description":"Invalid signature"},"422":{"description":"Invalid QFR"}}
+      }
+    }
+  }
+}
