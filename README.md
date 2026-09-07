@@ -40,9 +40,13 @@ curl -s https://openqfr.dev/a2a/v1/message:send \
 
 Supported operations are `search`, `get`, and `stats`.
 
-## MCP adapter
+## MCP
 
-The repository includes a dependency-free stdio MCP adapter. It exposes read-only `qfr_search`, `qfr_get`, and `qfr_stats` tools and fetches public data from OpenQFR.
+The public, stateless Streamable HTTP endpoint is:
+
+`https://openqfr.dev/mcp`
+
+It exposes read-only `qfr_search`, `qfr_get`, and `qfr_stats` tools. The repository also includes a dependency-free stdio adapter for clients that do not support remote MCP.
 
 ```bash
 python3 mcp_server.py
@@ -62,6 +66,8 @@ Example client configuration:
 ```
 
 ## Submission safety
+
+Submission headers and review rules are documented in [SUBMISSIONS.md](SUBMISSIONS.md).
 
 Signed submissions are quarantined for review. They must conform to QFR `0.1.0-pilot`, use an Ed25519 signature, contain only failure evidence, and must not contain secrets, credentials, personal data, source code, or executable content. Public records are read-only.
 
