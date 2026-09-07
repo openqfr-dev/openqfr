@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "dev.openqfr/openqfr",
+  "title": "OpenQFR",
+  "description": "Search machine-readable quantitative strategy failure evidence before repeating failed research.",
+  "version": "0.1.0",
+  "websiteUrl": "https://openqfr.dev",
+  "repository": {
+    "url": "https://github.com/openqfr-dev/openqfr",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://openqfr.dev/mcp"
+    }
+  ]
+}
