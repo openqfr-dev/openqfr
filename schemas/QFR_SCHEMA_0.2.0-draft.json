@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openqfr.dev/schema/qfr/0.2.0-draft",
+  "title": "Quant Failure Record (QFR) 0.2.0 draft",
+  "description": "Compatibility-design draft. Not accepted by the submission endpoint until separately promoted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "schema_version", "record_id", "record_type", "source", "scope", "hypothesis", "strategy", "execution_and_validation", "outcome", "evidence", "lifecycle", "record_sha256"],
+  "properties": {
+    "schema": {"const": "QFR"},
+    "schema_version": {"const": "0.2.0-draft"},
+    "record_id": {"type": "string", "pattern": "^qfr:[0-9a-f]{24}$"},
+    "record_type": {"const": "NEGATIVE_STRATEGY_EVIDENCE"},
+    "source": {"type": "object"},
+    "scope": {"type": "object"},
+    "hypothesis": {"type": "object"},
+    "strategy": {
+      "type": "object",
+      "required": ["logic_fingerprint"],
+      "properties": {
+        "logic_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "assumption_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "execution_cost_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "execution_and_validation": {"type": "object"},
+    "outcome": {
+      "type": "object",
+      "required": ["verdict", "failure_codes"],
+      "properties": {
+        "verdict": {"const": "FAIL"},
+        "failure_codes": {"type": "array", "minItems": 1, "uniqueItems": true}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["assurance", "provenance_verifiable", "independent_verification", "no_orders", "known_limitations"],
+      "properties": {
+        "assurance": {
+          "enum": ["CLAIMED", "SIGNED_CLAIM", "SOURCE_DERIVED", "INDEPENDENTLY_REPRODUCED"]
+        },
+        "provenance_verifiable": {"type": "boolean"},
+        "independent_verification": {
+          "type": "object",
+          "required": ["status", "verifiers"],
+          "properties": {
+            "status": {"enum": ["NOT_REQUESTED", "UNVERIFIED", "PARTIALLY_VERIFIED", "VERIFIED", "DISPUTED"]},
+            "verifiers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["verifier_id", "method", "verified_at"],
+                "properties": {
+                  "verifier_id": {"type": "string"},
+                  "organization": {"type": ["string", "null"]},
+                  "method": {"type": "string"},
+                  "verified_at": {"type": "string", "format": "date-time"},
+                  "receipt_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+                }
+              }
+            }
+          }
+        },
+        "no_orders": {"type": "boolean"},
+        "known_limitations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": ["status", "expires_at", "supersedes", "eligible_for_automatic_decision"],
+      "properties": {
+        "status": {"enum": ["ACTIVE", "EXPIRED", "SUPERSEDED", "RETRACTED"]},
+        "expires_at": {"type": ["string", "null"], "format": "date-time"},
+        "supersedes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^qfr:[0-9a-f]{24}$"}
+        },
+        "eligible_for_automatic_decision": {"type": "boolean"},
+        "status_reason": {"type": ["string", "null"]}
+      }
+    },
+    "record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
