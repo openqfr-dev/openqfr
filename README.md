@@ -9,6 +9,7 @@ OpenQFR is a machine-readable library of **failed quantitative strategy evidence
 - REST API: `https://openqfr.dev/api/v1`
 - QFR records: `https://openqfr.dev/api/v1/failures`
 - Schema: `https://openqfr.dev/schema/qfr/0.1.0`
+- Next-version schema draft: `https://openqfr.dev/schema/qfr/0.2.0-draft`
 - A2A Agent Card: `https://openqfr.dev/.well-known/agent-card.json`
 - A2A endpoint: `https://openqfr.dev/a2a/v1/message:send`
 
